@@ -31,7 +31,7 @@ Wanted a tool which can scan the network and graph it
 
 	Debian based distros: `sudo apt install graphviz-dev`
     
-    Fedora: `sudo apt install graphviz-devel`
+    Fedora: `sudo dnf install graphviz-devel`
     
     Arch: `sudo pacman -S graphviz`
  
@@ -48,7 +48,7 @@ Wanted a tool which can scan the network and graph it
 
 ```shell
 ❯ ./soks -h
-SokS version 0.1
+SokS version 0.2
 Usage: ./soks [Scan Types(s)] [Options] {Targets}
 TARGET:
       can pass hostnames, IP addresses
