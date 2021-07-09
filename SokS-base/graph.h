@@ -21,7 +21,7 @@
 }
 
 #define graph_end() if(GRAPH) {\
-  verbose("graph_end");\
+  verbose("ending graph dot file");\
   FILE *graph = fopen("graph.dot", "a+");\
   fprintf(graph, "\n}");\
   fclose(graph);\

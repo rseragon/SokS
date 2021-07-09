@@ -3,3 +3,7 @@
 
 # binary/executable files
 bin/*
+
+# Graphviz files
+*.dot
+*.jpg

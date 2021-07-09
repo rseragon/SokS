@@ -20,26 +20,20 @@ short int sockfd = -1;
 extern int VERBOSE; // verbosity
 extern char *EXEC_NAME;
 
+/*
+ * Checks if a host is a alive
+ * 
+ * returns 1 if alive
+ */
+
 int check_alive_ping(char *host_name) {
 
-  char command[41];
+  char command[100];
   int com_ret = -1; // the return value of command
 
-#if __linux__
-  // for unix based operating systems
-
-  snprintf(command, 40, "ping -c 1 %s 2>&1>/dev/null", host_name);
+  snprintf(command, 99, "ping -c 1 \"%s\" &>/dev/null", host_name);
   com_ret = system(command);
   com_ret = com_ret/128; // since bash returns 127>>n values
-
-#elif _WIN32
-  // Windows port
-  //
-  //
-  //
-#else
-  check_err(0, "Unkown Operating System");
-#endif
 
   switch(com_ret) {
     
@@ -48,20 +42,27 @@ int check_alive_ping(char *host_name) {
       return 1;
 
     case 2: // Target seems to be down
+      verbose("%s Taget seems to be down",host_name);
       return 0;
 
     case 4: // Name or service not known
+      verbose("%s Name or service not known",host_name);
       return -1;
 
-    default: // Target unreachable
+    default: // Target unreachable or some other error
+      verbose("%s unable to reach target", host_name);
       return -2;
   }
 
 }
 
-// 1 - tcp
-// 2 - udp
-// 3 - both
+/*
+ * A wrapper for port scanning
+ *
+ * 1 - tcp
+ * 2 - udp
+ * 3 - both
+ */
 int port_scan(char *host, char*ports, int type) {
 
   struct hostent *target;

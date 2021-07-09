@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-#include <time.h>
+#include <sys/time.h>
 
 #include "host_utils.h"
 #include "dbg.h"
@@ -13,22 +13,29 @@
 
 // Hated Globals
 int VERBOSE = FALSE;
-int DEBUG = FALSE;
-char *EXEC_NAME;
+int DEBUG = FALSE; 
+char *EXEC_NAME; // The executable name
+bool GRAPH = FALSE; // for graph
 
-char *VERSION = "0.1";
+char *VERSION = "0.2";
 
 int main(int argc, char *argv[])
 {
 
+  // For calculating scanning time
+  struct timeval start_time, end_time;
+  gettimeofday(&start_time, NULL); // Start time
 
   EXEC_NAME = strdup(argv[0]);
 
+  char* graph_name = NULL; // Graph output name
+
   if(argc == 1) {
-    print_help();
+    print_help(); // prints help if no args are given
     exit(EXIT_SUCCESS);  
   } 
 
+  // getopt variables
   int arg;
   int option_index;
 
@@ -37,9 +44,9 @@ int main(int argc, char *argv[])
   bool tcp_scan = FALSE; // default scan type
   bool udp_scan = FALSE;
 
+
   int total_hosts = 0;
   int alive_hosts = 0;
-  bool GRAPH = FALSE; // for graph
 
   static struct option long_options[] = {
 
@@ -122,7 +129,6 @@ int main(int argc, char *argv[])
   }
 
   // Start scanning
-  clock_t start = clock();  // Start time
   printf("Starting scan, Time:"); 
   print_curr_time();
 
@@ -169,11 +175,8 @@ int main(int argc, char *argv[])
           }
         }
       } 
-      else {
-        verbose("%s (down)", h);
-      }
+
     }
-    //printf("\n");
     
     // end graph macro
     graph_end();
@@ -185,9 +188,12 @@ int main(int argc, char *argv[])
   // Warn if total hosts given = 0
   warn((total_hosts != 0), "No targets given, so 0 hosts scanned");
   // End scan
-  clock_t end = clock();
-  // Fix time taken
-  printf("Scan done: %d IP address (%d alive) Time taken: %f\n",total_hosts, alive_hosts, (double)(end-start)/CLOCKS_PER_SEC);
+  gettimeofday(&end_time, NULL);
+
+  // Caculate time taken
+  double time_taken = (end_time.tv_sec - start_time.tv_sec) +
+                      (end_time.tv_usec - start_time.tv_usec)/1e6;
+  printf("Scan done: %d IP address (%d alive) Time taken: %f sec\n",total_hosts, alive_hosts, time_taken);
 
   return 0;
 

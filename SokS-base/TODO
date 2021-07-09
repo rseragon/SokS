@@ -1,5 +1,4 @@
 Rewrite check_alive_ping
-Graph
-Scan time
-add errnor handling to functions
-
+add error handling to functions
+cidr listing
+improve graph macros/functions

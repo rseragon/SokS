@@ -29,16 +29,15 @@ Wanted a tool which can scan the network and graph it
 
 1. Install graphviz library
 
-	Debian based distros:
-    `sudo apt install graphviz-dev`
+	Debian based distros: `sudo apt install graphviz-dev`
     
-    Fedora: `sudo apt install graphviz`
+    Fedora: `sudo apt install graphviz-devel`
     
     Arch: `sudo pacman -S graphviz`
  
  2. Build the base
  	```
-    make soks
+    make base 
     ```
  3. Installation
  
@@ -48,9 +47,9 @@ Wanted a tool which can scan the network and graph it
 ---
 
 ```shell
-❯ ./main -h
+❯ ./soks -h
 SokS version 0.1
-Usage: ./main [Scan Types(s)] [Options] {Targets}
+Usage: ./soks [Scan Types(s)] [Options] {Targets}
 TARGET:
       can pass hostnames, IP addresses
       Example: google.com, 192,168.0.1
@@ -67,10 +66,11 @@ MISC:
       -h: Prints This help Summary
       -g: Makes a Pseudo Network Graph(WIP)
 EXAMPLES:
-      ./main -v google.com
-      ./main -sT google.com -p 80,443
-      ./main -sU 192.168.0.1 -p 21,23
+      ./soks -v google.com
+      ./soks -sT google.com -p 80,443
+      ./soks -sU 192.168.0.1 -p 21,23
 ```
+
 
 
 
