@@ -17,7 +17,7 @@ int DEBUG = FALSE;
 char *EXEC_NAME; // The executable name
 bool GRAPH = FALSE; // for graph
 
-char *VERSION = "0.2";
+char *VERSION = "0.3";
 
 int main(int argc, char *argv[])
 {
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
   int arg;
   int option_index;
 
-  char *ports_str;
+  char *ports_str = NULL;
   bool scan_ports = FALSE;
   bool tcp_scan = FALSE; // default scan type
   bool udp_scan = FALSE;
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
   };
 
 
-  while((arg = getopt_long_only(argc, argv, "s:p:vVg", long_options, &option_index)) != EOF) {
+  while((arg = getopt_long_only(argc, argv, "s:p:vVg:", long_options, &option_index)) != EOF) {
 
     switch(arg) {
 
@@ -105,6 +105,9 @@ int main(int argc, char *argv[])
 
       case 'g':
         GRAPH = TRUE;
+        error_exit((optarg), "Graph name not provided");
+        graph_name = strdup(optarg);
+        error_exit((graph_name != NULL), "Failed to set graph name");
         break;
 
       case 'p':
@@ -137,8 +140,21 @@ int main(int argc, char *argv[])
     
     // graph macro
     graph_create();
+
+    // Get This machine's ip
     char client_ip[20];
-    get_local_ip(client_ip); // get the machine's local ip
+    int ret = get_local_ip(client_ip); // get the machine's local ip
+    if(ret != 0) {
+      if(ret == -1) {
+        warn(1, "Failed to get this machine's ip, Are you connected to internet?");
+      }
+      else {
+        warn((ret == -1), "Unable to get the socket details, is your machine alright?");
+      }
+      debug_warn(1, "Unable to get machine's ip, diabled Graph flag");
+      GRAPH = FALSE;
+    }
+    
 
     while (optind < argc) {
       total_hosts++; 
@@ -147,8 +163,11 @@ int main(int argc, char *argv[])
       int alive = check_alive_ping(h); // check if host is alive
       if(alive == 1) 
       {
+        // Graph Macro
         graph_write(h, client_ip);
+
         alive_hosts++;
+
         // DNS
         char *ip_addr = dns(h);
         verbose("DNS: %s", ip_addr);
@@ -180,7 +199,7 @@ int main(int argc, char *argv[])
     
     // end graph macro
     graph_end();
-    graph_build(); // build the graph
+    graph_build(graph_name); // build the graph
 
 
   }
@@ -193,6 +212,7 @@ int main(int argc, char *argv[])
   // Caculate time taken
   double time_taken = (end_time.tv_sec - start_time.tv_sec) +
                       (end_time.tv_usec - start_time.tv_usec)/1e6;
+
   printf("Scan done: %d IP address (%d alive) Time taken: %f sec\n",total_hosts, alive_hosts, time_taken);
 
   return 0;

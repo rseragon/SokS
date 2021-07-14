@@ -7,9 +7,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "host_utils.h"
+#include "dbg.h"
 
 // Few Globals
 extern int VERBOSE; // setup verbosity in this file
+extern char* EXEC_NAME; // Ethe executable name
 
 /*
  * Get Machines IP address
@@ -17,6 +19,7 @@ extern int VERBOSE; // setup verbosity in this file
 int get_local_ip(char *buffer) {
 
   int sock = socket(AF_INET, SOCK_DGRAM, 0);
+  error_return((sock > 0), -1, "Failed opening socket, Unable to get the local client ip");
 
   const char* kGoogleDnsIp = "8.8.8.8";
   int dns_port = 53;

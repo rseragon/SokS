@@ -27,9 +27,9 @@
   fclose(graph);\
 }
 
-#define graph_build() if(GRAPH) {\
+#define graph_build(GRAPH_NAME) if(GRAPH) {\
   verbose("Building the graph");\
-  char *graph_args[] = {"fdp", "graph.dot", "-Tjpg", "-o", "network.jpg"};\
+  char *graph_args[] = {"fdp", "graph.dot", "-Tjpg", "-o", GRAPH_NAME};\
   build_graph(5, graph_args);\
 }
 
