@@ -14,7 +14,7 @@ void print_help() {
   printf("Usage: %s [Scan Types(s)] [Options] {Targets}\n",EXEC_NAME);
   printf("TARGET:\n\
       can pass hostnames, IP addresses\n\
-      Example: google.com, 192,168.0.1\n");
+      Example: google.com, 192.168.0.1\n");
   printf("SCAN TECHNIQUES:\n\
       -sU: UDP Scan (Slow/Unreliable)\n\
       -sT: TCP Scan\n");

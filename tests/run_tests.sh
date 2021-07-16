@@ -1,7 +1,14 @@
+VALGRIND='valgrind'
+
+if ! command -v $VALGRIND &> /dev/null
+then
+  echo "[ERROR] valgrind not found"
+  exit 1
+fi
+
 echo ""
 echo "Running Unit tests"
 
-VALGRIND='valgrind'
 
 t="tests/test.run"
 
