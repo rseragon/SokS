@@ -1,0 +1,11 @@
+digraph G {
+  node1 -> main;
+  node2 -> main;
+  node3 -> main;
+  node4 -> main;
+  node5 -> main;
+  node6 -> main;
+  node7 -> main;
+  node8 -> main;
+  node9 -> main;
+}

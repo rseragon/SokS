@@ -17,7 +17,7 @@ int DEBUG = FALSE;
 char *EXEC_NAME; // The executable name
 bool GRAPH = FALSE; // for graph
 
-char *VERSION = "0.3";
+char *VERSION = "0.4";
 
 int main(int argc, char *argv[])
 {
@@ -28,11 +28,16 @@ int main(int argc, char *argv[])
 
   EXEC_NAME = strdup(argv[0]);
 
+  if(EXEC_NAME == NULL) {
+    fprintf(stderr,"Failed to allocate memory. Try running again?\n");
+    exit(-1);
+  }
+
   char* graph_name = NULL; // Graph output name
 
   if(argc == 1) {
     print_help(); // prints help if no args are given
-    exit(EXIT_SUCCESS);  
+    exit(-1);  
   } 
 
   // getopt variables
@@ -54,7 +59,7 @@ int main(int argc, char *argv[])
     {"verbose", no_argument, &VERBOSE, 'v'},
     {"version", no_argument, 0, 'V'},
     {"debug", no_argument, 0, 'd'},
-    {"graph", no_argument, 0, 'g'},
+    {"graph", required_argument, 0, 'g'},
     {"port", required_argument, 0, 'p'},
     {"help", no_argument, 0, 'h'},
     {0,0,0,0}
@@ -69,7 +74,7 @@ int main(int argc, char *argv[])
       case 0:
         if(long_options[option_index].flag != 0)
           break;
-        printf("options %s",long_options[option_index].name);
+        warn(0, "options %s",long_options[option_index].name);
         if(optarg)
           printf(" with arg %s", optarg);
         printf("\n");
@@ -115,6 +120,7 @@ int main(int argc, char *argv[])
           error_exit(0, "Ports not provided");
         }
         ports_str = strdup(optarg);
+        error_exit((ports_str != NULL), "Ports list is empty");
         scan_ports = TRUE;
         //puts(ports_str);
         break;
@@ -146,12 +152,12 @@ int main(int argc, char *argv[])
     int ret = get_local_ip(client_ip); // get the machine's local ip
     if(ret != 0) {
       if(ret == -1) {
-        warn(1, "Failed to get this machine's ip, Are you connected to internet?");
+        warn(0, "Failed to get this machine's ip, Are you connected to internet?");
       }
       else {
         warn((ret == -1), "Unable to get the socket details, is your machine alright?");
       }
-      debug_warn(1, "Unable to get machine's ip, diabled Graph flag");
+      debug_warn(0, "Unable to get machine's ip, diabled Graph flag");
       GRAPH = FALSE;
     }
     

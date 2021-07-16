@@ -5,6 +5,9 @@
 extern char *EXEC_NAME;
 extern char *VERSION;
 
+/*
+ * Prints help
+ */
 void print_help() {
 
   printf("SokS version %s\n", VERSION);
@@ -23,7 +26,7 @@ void print_help() {
       -v: Increases Verbosity\n\
       -d: Enables Debugging\n\
       -h: Prints This help Summary\n\
-      -g: Makes a Pseudo Network Graph(WIP)\n");
+      -g: Makes a Pseudo Network Graph\n");
   
   printf("EXAMPLES:\n\
       %s -v google.com\n\

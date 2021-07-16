@@ -11,7 +11,7 @@
 
 // Few Globals
 extern int VERBOSE; // setup verbosity in this file
-extern char* EXEC_NAME; // Ethe executable name
+extern char* EXEC_NAME; // the executable name
 
 /*
  * Get Machines IP address

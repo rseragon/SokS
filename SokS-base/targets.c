@@ -89,7 +89,7 @@ int port_scan(char *host, char*ports, int type) {
       token = strtok(NULL ,",");
       //error_exit(, "Port range should be 1-65535 given: %d", port);
       if((port < 1) || (port > 65535)){ 
-        printf("Error: Port range should be 1-65535 given: %d\n",port);
+        error("Port range should be 1-65535 given: %d\n",port);
         continue;
       }
       verbose("Scanning port: %d", port);
@@ -107,7 +107,7 @@ int port_scan(char *host, char*ports, int type) {
       token = strtok(NULL ,",");
       //error_exit(, "Port range should be 1-65535 given: %d", port);
       if((port < 1) || (port > 65535)){ 
-        printf("Error: Port range should be 1-65535 given: %d\n",port);
+        error("Port range should be 1-65535 given: %d\n",port);
         continue;
       }
       verbose("Scanning port: %d", port);
@@ -125,7 +125,7 @@ int port_scan(char *host, char*ports, int type) {
       token = strtok(NULL ,",");
       //error_exit(, "Port range should be 1-65535 given: %d", port);
       if((port < 1) || (port > 65535)){ 
-        printf("Error: Port range should be 1-65535 given: %d\n",port);
+        error("Port range should be 1-65535 given: %d\n",port);
         continue;
       }
       verbose("Scanning port: %d", port);
