@@ -102,3 +102,61 @@ int rdns(const char* ipv4, char* buffer) {
 
 
 }
+
+
+// Idk why I put them here
+
+int cidr_to_ip(const char *cidr, uint32_t *ip, uint32_t *mask) {
+
+  uint8_t a, b, c, d, bits;
+
+  if(sscanf(cidr, "%hhu.%hhu.%hhu.%hhu/%hhu", &a, &b, &c, &d, &bits) < 5) {
+    // Add some error or debug macro here
+    return -1; // did not match cidr syntax
+  }
+
+  if(bits > 32) {
+    return -1; // invalid bit count
+  }
+
+
+  *ip = 
+    (a << 24L) |
+    (b << 16L) |
+    (c << 8L) |
+    (d);
+
+  *mask = (0xFFFFFFFFUL << (32 - bits)) & 0xFFFFFFFFUL;
+
+  uint32_t network = (*ip & *mask);
+
+  int diff = ((network | ~*mask) -1 ) - (network + 1) + 2;
+
+  return diff;
+
+
+}
+
+int range_to_ip(const char *range, uint32_t *ip) {
+
+  uint8_t a, b, c, d;
+  int r4;
+
+  // currently only supports the last bit range
+  if(sscanf(range, "%hhu.%hhu.%hhu.%hhu-%d", &a, &b, &c, &d, &r4) < 5) {
+    // Add some error or debug macro here
+    return -1; // did not match range syntax
+  }
+
+  *ip = 
+    (a << 24L) |
+    (b << 16L) |
+    (c << 8L) |
+    (d);
+
+  int diff = r4 - d;
+
+  return diff;
+
+
+}

@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#define debug(M, ...) fprintf(stdout, "[DEBUG](%s:%d) " M "\n", __FILE__, __LINE__, ##__VA_ARGS__);
+
 //Debugging
 #define debug_info(A, M, ...) if(!(A) && DEBUG) {\
   fprintf(stdout, "[DEBUG Info] %s:%s:%d " M "\n", __FILE__, __func__, __LINE__, ##__VA_ARGS__);\

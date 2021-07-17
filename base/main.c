@@ -14,10 +14,11 @@
 // Hated Globals
 int VERBOSE = FALSE;
 int DEBUG = FALSE; 
-char *EXEC_NAME; // The executable name
-bool GRAPH = FALSE; // for graph
+char *EXEC_NAME = NULL; // The executable name
+int GRAPH = FALSE; // for graph
+char *CLIENT_IP; // This machines IP
 
-char *VERSION = "0.4";
+char *VERSION = "0.7";
 
 int main(int argc, char *argv[])
 {
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
   bool scan_ports = FALSE;
   bool tcp_scan = FALSE; // default scan type
   bool udp_scan = FALSE;
+  bool list_scan = FALSE;
 
 
   int total_hosts = 0;
@@ -89,6 +91,9 @@ int main(int argc, char *argv[])
         } 
         else if(strcmp(optarg,"U") == 0) {
           udp_scan = TRUE;
+        }
+        else if(strcmp(optarg, "L") == 0) {
+          list_scan = TRUE;
         }
         else {
           error_exit(0, "Unknown scan type: %s",optarg);
@@ -160,47 +165,35 @@ int main(int argc, char *argv[])
       debug_warn(0, "Unable to get machine's ip, diabled Graph flag");
       GRAPH = FALSE;
     }
+    CLIENT_IP = client_ip;
     
 
     while (optind < argc) {
-      total_hosts++; 
+      //total_hosts++; 
 
-      char *h = argv[optind++];
-      int alive = check_alive_ping(h); // check if host is alive
-      if(alive == 1) 
-      {
-        // Graph Macro
-        graph_write(h, client_ip);
+      char *h = strdup(argv[optind++]);
 
-        alive_hosts++;
-
-        // DNS
-        char *ip_addr = dns(h);
-        verbose("DNS: %s", ip_addr);
-        
-        // rDNS
-        char HName[255]; // longest hostname size
-        int ret = rdns(ip_addr, HName);
-        if(ret == 0) // Success in rDNS
-          verbose("rDNS: %s",HName);
-
-        // Port Scanning
-        if (scan_ports == TRUE)
-        {
+      if(list_scan) {
+        scan_wrapper(h, &total_hosts, 0, NULL);
+      }
+      else {
+        if(scan_ports == TRUE) {
           if(tcp_scan && udp_scan) {
-            port_scan(h, ports_str, 3); 
+            alive_hosts = scan_wrapper(h, &total_hosts, 3, ports_str);
           }
           else if(udp_scan) {
-            port_scan(h, ports_str, 2);
+            alive_hosts = scan_wrapper(h, &total_hosts, 2, ports_str);
           }
           else {
             if(!tcp_scan)
               warn(0, "Scan Type not provided (defaulting to TCP)");
-            port_scan(h, ports_str, 1);
+            alive_hosts = scan_wrapper(h, &total_hosts, 1, ports_str);
           }
         }
-      } 
-
+        else {
+          alive_hosts = scan_wrapper(h, &total_hosts, -1, NULL);
+        }
+      }
     }
     
     // end graph macro
@@ -219,7 +212,7 @@ int main(int argc, char *argv[])
   double time_taken = (end_time.tv_sec - start_time.tv_sec) +
                       (end_time.tv_usec - start_time.tv_usec)/1e6;
 
-  printf("Scan done: %d IP address (%d alive) Time taken: %f sec\n",total_hosts, alive_hosts, time_taken);
+  printf("\nScan done: %d IP address (%d alive) Time taken: %f sec\n",total_hosts, alive_hosts, time_taken);
 
   return 0;
 

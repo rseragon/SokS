@@ -12,13 +12,105 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 
+#include "host_utils.h"
 #include "targets.h"
+#include "graph.h"
 #include "dbg.h"
 
 // Globals
 short int sockfd = -1;
 extern int VERBOSE; // verbosity
 extern char *EXEC_NAME;
+extern int GRAPH;
+extern char *CLIENT_IP; // should this be a global var?
+
+
+// A wrapper for scanner
+int scan_wrapper(char *target, int *total_host, int scan_type, char *ports) {
+
+  int alive = 0;
+
+  int hosts = -1;
+  uint32_t ip, mask;
+
+  if((hosts = cidr_to_ip(target, &ip, &mask)) != -1) {
+    // cidr scan
+    *total_host += hosts;
+    uint32_t network = (ip & mask) + 1;
+
+    for(int i = 0; i < hosts; i++){
+      struct in_addr target_ip = {ntohl(network + i)};
+      alive += scanner(inet_ntoa(target_ip), scan_type, ports);
+    }
+
+    
+  }
+  else if((hosts = range_to_ip(target , &ip)) != -1) {
+    // Range scan
+    *total_host += hosts;
+
+    for(int i = 0; i < hosts; i++) {
+      struct in_addr target_ip = {ntohl(ip + i)}; 
+      alive += scanner(inet_ntoa(target_ip), scan_type, ports);
+    }
+  }
+  else {
+    // Normal scan
+    *total_host += 1;
+    alive = scanner(target, scan_type, ports);
+  }
+
+  return alive;
+
+}
+
+
+/*
+ * The main scanner
+ *
+ * -1 - No port scan
+ * 0 - list targets
+ * 1 - tcp
+ * 2 - udp
+ * 3 - both
+ *
+ * returns No. of alive hosts
+ */
+int scanner(char *target, int scan_type, char *ports) {
+
+  // -sL scan
+  if(scan_type == 0) {
+    printf("%s\n", target);
+    return 0;
+  }
+
+  int alive = check_alive_ping(target);
+
+  if(alive == 1) {
+     
+    // graph Macro
+    graph_write(target, CLIENT_IP);
+
+    // DNS
+    char *ip_addr = dns(target);
+    verbose("DNS: %s", ip_addr);
+
+    // rDNS
+    char HName[255]; // longest hostname size
+    int ret = rdns(ip_addr, HName);
+    if(ret == 0)
+      verbose("rDNS: %s", HName);
+
+    // port Scanning
+    if(scan_type != -1) 
+      port_scan(target, ports, scan_type);
+
+    return 1; // host is alive
+  }
+
+  return 0; // host is not alive
+}
+
 
 /*
  * Checks if a host is a alive
@@ -38,7 +130,7 @@ int check_alive_ping(char *host_name) {
   switch(com_ret) {
     
     case 0: //alive
-      printf("%s (alive)\n",host_name);
+      printf("\n%s (alive)\n",host_name);
       return 1;
 
     case 2: // Target seems to be down
@@ -59,11 +151,8 @@ int check_alive_ping(char *host_name) {
 /*
  * A wrapper for port scanning
  *
- * 1 - tcp
- * 2 - udp
- * 3 - both
  */
-int port_scan(char *host, char*ports, int type) {
+int port_scan(char *host, char *ports, int type) {
 
   struct hostent *target;
   char *ipv4;
@@ -81,7 +170,7 @@ int port_scan(char *host, char*ports, int type) {
   printf("    PORT\t\tSTATE\n");
   if(type == 1) {
 
-    verbose("Starting TCP port scan");
+    //verbose("Starting TCP port scan");
     char *token = strtok(ports, ",");
 
     while(token != NULL) {
@@ -172,7 +261,7 @@ int tcp_scan(char *ipv4, int port)  {
       printf("%6d/tcp\t\topen\n",port);
     }
     else {
-      verbose("%6d/tcp\t\tclosed",port);
+      printf("%6d/tcp\t\tclosed\n",port);
     }
   }
   else {
