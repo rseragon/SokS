@@ -7,3 +7,7 @@ bin/*
 # Graphviz files
 *.dot
 *.jpg
+
+# Other files
+*.log
+*.run

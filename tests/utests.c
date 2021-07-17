@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "unit_test.h"
 
-#include "../SokS-base/graph.h" // change this
+#include <graph.h> 
 
 // modified version of `graph_build` macro
 int graph_test() {

@@ -12,21 +12,28 @@ void print_help() {
 
   printf("SokS version %s\n", VERSION);
   printf("Usage: %s [Scan Types(s)] [Options] {Targets}\n",EXEC_NAME);
+
   printf("TARGET:\n\
       can pass hostnames, IP addresses\n\
       Example: google.com, 192.168.0.1\n");
+
   printf("SCAN TECHNIQUES:\n\
       -sU: UDP Scan (Slow/Unreliable)\n\
       -sT: TCP Scan\n");
+
   printf("PORT SPECIFICATIONS:\n\
       -p <comma seperated ports>\n\
       Example -p22; -p22,80,443\n");
+
+  printf("GRAPH:\n\
+      -g <GraphName>.jpg\n\
+      Note: The extension name doesn't matter\n");
+
   printf("MISC:\n\
       -V: Prints version\n\
       -v: Increases Verbosity\n\
       -d: Enables Debugging\n\
-      -h: Prints This help Summary\n\
-      -g: Makes a Pseudo Network Graph\n");
+      -h: Prints This help Summary\n");
   
   printf("EXAMPLES:\n\
       %s -v google.com\n\
