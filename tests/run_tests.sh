@@ -1,9 +1,9 @@
 VALGRIND='valgrind'
 
-if ! command -v $VALGRIND &> /dev/null
+if !(command -v $VALGRIND > /dev/null 2>&1)
 then
-  echo "[ERROR] valgrind not found"
-  exit 1
+  echo "[ERROR] valgrind not found, stopping tests..."
+  exit
 fi
 
 echo ""
