@@ -28,7 +28,7 @@ extern char *CLIENT_IP; // should this be a global var?
 // A wrapper for scanner
 int scan_wrapper(char *target, int *total_host, int scan_type, char *ports) {
 
-  int alive = 0;
+  static int alive = 0;
 
   int hosts = -1;
   uint32_t ip, mask;
@@ -123,7 +123,7 @@ int check_alive_ping(char *host_name) {
   char command[100];
   int com_ret = -1; // the return value of command
 
-  snprintf(command, 99, "ping -c 1 \"%s\" &>/dev/null", host_name);
+  snprintf(command, 99, "ping -c 1 \"%s\" >/dev/null 2>&1", host_name);
   com_ret = system(command);
   com_ret = com_ret/128; // since bash returns 127>>n values
 

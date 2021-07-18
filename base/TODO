@@ -1,5 +1,4 @@
 Rewrite check_alive_ping
 add error handling to functions
-cidr listing
 debugging
 fix graph lib
