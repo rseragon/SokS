@@ -57,7 +57,7 @@ int scan_wrapper(char *target, int *total_host, int scan_type, char *ports) {
   else {
     // Normal scan
     *total_host += 1;
-    alive = scanner(target, scan_type, ports);
+    alive += scanner(target, scan_type, ports);
   }
 
   return alive;
