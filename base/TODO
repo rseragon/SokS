@@ -1,4 +1,3 @@
 Rewrite check_alive_ping
 add error handling to functions
 debugging
-fix graph lib

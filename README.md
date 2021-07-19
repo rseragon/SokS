@@ -1,17 +1,15 @@
-# SokS
+# SokS (Socket Scanner)
 > A simple *NIX based network scanner
-<!--
-ADD badges here
-[![Build Status](https://travis-ci.com/alichtman/shallow-backup.svg?branch=master)](https://travis-ci.com/alichtman/shallow-backup)
- -->
 
-`SokS` - Socket Scanner 
+ 
+![Version](https://img.shields.io/badge/Version-0.8-blue)
 
 Contents
 ========
 
  * [Why?](#why)
- * [Installation(WIP)](#installation)
+ * [Features](#features)
+ * [Installation](#installation)
  * [Usage](#usage)
 
 
@@ -19,13 +17,20 @@ Contents
 
 ### Why?
 
-Wanted a tool which can scan the network and graph it
+Cuz Why Not
+
+### Features
+
++ Check for alive hosts in a network
++ Scan for open TCP/UDP ports
++ Graph alive targets in the network
++ more coming soon....
 
 ### Installation
 ---
-> This is still in alpha stages, so you can't install it.
+> Install at YOUR own risk
 
-- If you want to try it out, build it using this steps
+Pre-requisite:
 
 1. Install graphviz library
 
@@ -37,39 +42,46 @@ Wanted a tool which can scan the network and graph it
  
  2. Build the base
  	```
-    make base 
+    make  
     ```
  3. Installation
  
- > WIP
+	```
+	sudo make install
+	```
 
 ### Usage
 ---
 
 ```shell
-❯ ./soks -h
-SokS version 0.2
-Usage: ./soks [Scan Types(s)] [Options] {Targets}
+❯ soks
+SokS version 0.8
+Usage: soks [Scan Types(s)] [Options] {Targets}
 TARGET:
-      can pass hostnames, IP addresses
-      Example: google.com, 192,168.0.1
+      can pass hostnames, IP, CIDR addresses, IP ranges(Only to the last octet)
+      Example: google.com, 192.168.0.1, 10.10.10.10/24, 1.1.1.1-10
 SCAN TECHNIQUES:
       -sU: UDP Scan (Slow/Unreliable)
       -sT: TCP Scan
+      -sL: List the hosts
 PORT SPECIFICATIONS:
       -p <comma seperated ports>
       Example -p22; -p22,80,443
+GRAPH:
+      -g <GraphName>.jpg
+      Note: The extension name doesn't matter
 MISC:
       -V: Prints version
       -v: Increases Verbosity
       -d: Enables Debugging
       -h: Prints This help Summary
-      -g: Makes a Pseudo Network Graph(WIP)
 EXAMPLES:
-      ./soks -v google.com
-      ./soks -sT google.com -p 80,443
-      ./soks -sU 192.168.0.1 -p 21,23
+      soks -v google.com
+      soks -sT google.com -p 80,443
+      soks -sU 192.168.0.1 -p 21,23
+      soks 192.168.0.2/24 -g graph.jpg
 ```
+
 
 
 

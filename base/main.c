@@ -18,7 +18,7 @@ char *EXEC_NAME = NULL; // The executable name
 int GRAPH = FALSE; // for graph
 char *CLIENT_IP; // This machines IP
 
-char *VERSION = "0.7";
+char *VERSION = "0.8";
 
 int main(int argc, char *argv[])
 {
