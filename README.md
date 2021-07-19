@@ -1,8 +1,14 @@
 # SokS (Socket Scanner)
 > A simple *NIX based network scanner
 
- 
+
 ![Version](https://img.shields.io/badge/Version-0.8-blue)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rseragon/SokS/C%20CI)
+<p align="center">
+  <img align="center" width='400' src="https://i.ibb.co/S0vdvKR/soks.png">
+</p>
+
+
 
 Contents
 ========
@@ -81,6 +87,7 @@ EXAMPLES:
       soks -sU 192.168.0.1 -p 21,23
       soks 192.168.0.2/24 -g graph.jpg
 ```
+
 
 
 
