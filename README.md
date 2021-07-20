@@ -1,9 +1,11 @@
 # SokS (Socket Scanner)
 > A simple *NIX based network scanner
 
+<a href="https://github.com/rseragon/SokS/tree/master" alt="Version">
+	<img src="https://img.shields.io/badge/Version-0.8-blue" /></a>
+<a href="https://github.com/rseragon/SokS/actions/workflows/c.yml" alt="Build">
+	<img src="https://img.shields.io/github/workflow/status/rseragon/SokS/C%20CI" /></a>
 
-![Version](https://img.shields.io/badge/Version-0.8-blue)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rseragon/SokS/C%20CI)
 <p align="center">
   <img align="center" width='400' src="https://i.ibb.co/S0vdvKR/soks.png">
 </p>
@@ -43,6 +45,8 @@ Pre-requisite:
 	Debian based distros: `sudo apt install graphviz-dev`
     
     Fedora: `sudo dnf install graphviz-devel`
+
+    Ubuntu: `sudo apt-get install libgraphviz-dev`
     
     Arch: `sudo pacman -S graphviz`
  
@@ -55,6 +59,8 @@ Pre-requisite:
 	```
 	sudo make install
 	```
+![Install](https://img.shields.io/badge/Installation-asciinema-blue?style=flat&logo=asciinema)
+[![asciicast](https://asciinema.org/a/mZid8KR9JdJ6vMu51JYolvwsz.svg)](https://asciinema.org/a/mZid8KR9JdJ6vMu51JYolvwsz)
 
 ### Usage
 ---
@@ -87,6 +93,8 @@ EXAMPLES:
       soks -sU 192.168.0.1 -p 21,23
       soks 192.168.0.2/24 -g graph.jpg
 ```
+![Example](https://img.shields.io/badge/Example-asciinema-blue?style=flat&logo=asciinema)
+[![asciicast](https://asciinema.org/a/3Dyt3bdQcqkH6Jp8lG9EzQZdB.svg)](https://asciinema.org/a/3Dyt3bdQcqkH6Jp8lG9EzQZdB)
 
 
 
