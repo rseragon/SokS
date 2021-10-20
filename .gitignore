@@ -11,3 +11,6 @@ bin/*
 # Other files
 *.log
 *.run
+
+out/
+Makefile

@@ -1,4 +1,5 @@
 # SokS (Socket Scanner)
+### Shifting to CMake (WIP)
 > A simple *NIX based network scanner
 
 <a href="https://github.com/rseragon/SokS/tree/master" alt="Version">
