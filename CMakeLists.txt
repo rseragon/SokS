@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 include(FindPkgConfig) # pkg-config
 
-project(soks VERSION 0.8 LANGUAGES C)
+project(soks VERSION 0.9 LANGUAGES C)
 
 file(GLOB SokS_SRC "base/*.c")
 
@@ -21,6 +21,8 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GRAPHVIZ_LIBRARIES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC src/ ${GRAPHVIZ_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC src/ ${GRAPHVIZ_INCLUDE_DIRS} PUBLIC ${PROJECT_BINARY_DIR})
+
+configure_file(${PROJECT_SOURCE_DIR}/base/SoksConfig.h.in ${PROJECT_BINARY_DIR}/SoksConfig.h)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

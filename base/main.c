@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-#include <sys/time.h>
 
 #include <omp.h>
 
@@ -13,6 +12,9 @@
 #include "helper.h"
 #include "graph.h"
 
+// Config file from CMake
+#include "SoksConfig.h"
+
 // Hated Globals
 int VERBOSE = FALSE;
 int DEBUG = FALSE; 
@@ -20,14 +22,14 @@ char *EXEC_NAME = NULL; // The executable name
 int GRAPH = FALSE; // for graph
 char *CLIENT_IP; // This machines IP
 
-char *VERSION = "0.8";
+//char *VERSION = "0.8";
 
 int main(int argc, char *argv[])
 {
 
-  // For calculating scanning time
-  struct timeval start_time, end_time;
-  gettimeofday(&start_time, NULL); // Start time
+
+  // Start time
+  double start = omp_get_wtime();
 
   EXEC_NAME = strdup(argv[0]);
 
@@ -209,12 +211,10 @@ int main(int argc, char *argv[])
 
   // Warn if total hosts given = 0
   warn((total_hosts != 0), "No targets given, so 0 hosts scanned");
-  // End scan
-  gettimeofday(&end_time, NULL);
 
+  // End scan
   // Caculate time taken
-  double time_taken = (end_time.tv_sec - start_time.tv_sec) +
-                      (end_time.tv_usec - start_time.tv_usec)/1e6;
+  double time_taken = omp_get_wtime() - start;
 
   printf("\nScan done: %d IP address (%d alive) Time taken: %f sec\n",total_hosts, alive_hosts, time_taken);
 

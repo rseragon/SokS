@@ -1,5 +1,4 @@
-# SokS (Socket Scanner)
-### Shifting to CMake (WIP)
+# SokS (Socket Scanner) (BETA BRANCH)
 > A simple *NIX based network scanner
 
 <a href="https://github.com/rseragon/SokS/tree/master" alt="Version">
@@ -33,43 +32,38 @@ Cuz Why Not
 + Check for alive hosts in a network
 + Scan for open TCP/UDP ports
 + Graph alive targets in the network
++ Multi-threading (WIP)
 + more coming soon....
 
-### Installation
+### Installation (WIP)
 ---
 > Install at YOUR own risk
 
-Pre-requisite:
+Dependencies: `Graphviz`, `OpenMP`
 
-1. Install graphviz library
+Installation
+1. Configure cmake
 
-	Debian based distros: `sudo apt install graphviz-dev`
-    
-    Fedora: `sudo dnf install graphviz-devel`
+```
+mkdir build/ && cd build/
+cmake -G "Ninja" ..
+```
+2. Build 
 
-    Ubuntu: `sudo apt-get install libgraphviz-dev`
-    
-    Arch: `sudo pacman -S graphviz`
- 
- 2. Build the base
- 	```
-    make  
-    ```
- 3. Installation
- 
-	```
-	sudo make install
-	```
-![Install](https://img.shields.io/badge/Installation-asciinema-blue?style=flat&logo=asciinema)
-[![asciicast](https://asciinema.org/a/mZid8KR9JdJ6vMu51JYolvwsz.svg)](https://asciinema.org/a/mZid8KR9JdJ6vMu51JYolvwsz)
+```
+cmake --build .
+```
+
+3. installation
+`WIP`
 
 ### Usage
 ---
 
 ```shell
-❯ soks
-SokS version 0.8
-Usage: soks [Scan Types(s)] [Options] {Targets}
+❯ ./soks -h
+SokS version 0.9
+Usage: ./soks [Scan Types(s)] [Options] {Targets}
 TARGET:
       can pass hostnames, IP, CIDR addresses, IP ranges(Only to the last octet)
       Example: google.com, 192.168.0.1, 10.10.10.10/24, 1.1.1.1-10
@@ -89,13 +83,12 @@ MISC:
       -d: Enables Debugging
       -h: Prints This help Summary
 EXAMPLES:
-      soks -v google.com
-      soks -sT google.com -p 80,443
-      soks -sU 192.168.0.1 -p 21,23
-      soks 192.168.0.2/24 -g graph.jpg
+      ./soks -v google.com
+      ./soks -sT google.com -p 80,443
+      ./soks -sU 192.168.0.1 -p 21,23
+      ./soks 192.168.0.2/24 -g graph.jpg
 ```
-![Example](https://img.shields.io/badge/Example-asciinema-blue?style=flat&logo=asciinema)
-[![asciicast](https://asciinema.org/a/3Dyt3bdQcqkH6Jp8lG9EzQZdB.svg)](https://asciinema.org/a/3Dyt3bdQcqkH6Jp8lG9EzQZdB)
+
 
 
 

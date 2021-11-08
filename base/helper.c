@@ -2,8 +2,10 @@
 #include <time.h>
 #include "helper.h"
 
+#include "SoksConfig.h"
+
 extern char *EXEC_NAME;
-extern char *VERSION;
+//extern char *VERSION;
 
 /*
  * Prints help
