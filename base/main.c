@@ -4,6 +4,8 @@
 #include <getopt.h>
 #include <sys/time.h>
 
+#include <omp.h>
+
 #include "host_utils.h"
 #include "dbg.h"
 #include "main.h"
@@ -145,6 +147,8 @@ int main(int argc, char *argv[])
   // Start scanning
   printf("Starting scan, Time:"); 
   print_curr_time();
+  fflush(stdout); // idk why this is getting overlapped
+  verbose("MAX usable threads: %d\n", omp_get_num_procs());
 
 
   if(optind < argc) {

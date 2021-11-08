@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include <omp.h> // Threading 
+
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
@@ -38,20 +40,40 @@ int scan_wrapper(char *target, int *total_host, int scan_type, char *ports) {
     *total_host += hosts;
     uint32_t network = (ip & mask) + 1;
 
-    for(int i = 0; i < hosts; i++){
-      struct in_addr target_ip = {ntohl(network + i)};
-      alive += scanner(inet_ntoa(target_ip), scan_type, ports);
-    }
+    int i = 0;
+#pragma omp parallel
+    {
+#pragma omp single
+      verbose("No. of threads in use: %d\n", omp_get_num_threads());
 
+#pragma omp for
+      for(i = 0; i < hosts; i++){
+        struct in_addr target_ip = {ntohl(network + i)};
+        int isAlive = scanner(inet_ntoa(target_ip), scan_type, ports);
+#pragma omp atomic
+        alive += isAlive;
+      }
+    }
     
   }
   else if((hosts = range_to_ip(target , &ip)) != -1) {
     // Range scan
     *total_host += hosts;
 
-    for(int i = 0; i < hosts; i++) {
-      struct in_addr target_ip = {ntohl(ip + i)}; 
-      alive += scanner(inet_ntoa(target_ip), scan_type, ports);
+#pragma omp parallel 
+    {
+#pragma omp single
+      verbose("No. of threads in use: %d\n", omp_get_num_threads());
+
+#pragma omp for
+      for(int i = 0; i < hosts; i++) {
+        {
+          struct in_addr target_ip = {ntohl(ip + i)}; 
+          int isAlive = scanner(inet_ntoa(target_ip), scan_type, ports);
+#pragma omp atomic
+          alive += isAlive;
+        }
+      }
     }
   }
   else {
