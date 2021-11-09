@@ -14,7 +14,7 @@ jobs:
     - name: Install libs
       run: sudo apt-get install libgraphviz-dev libomp-dev
     - name: configure cmake
-      run: mkdir build/ && cd build/ && cmake -G "Ninja" ..
+      run: mkdir build/ && cd build/ && cmake ..
     - name: build
       run: cmake --build .
     - name: CTest
