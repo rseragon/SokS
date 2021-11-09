@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
   if(argc == 1) {
     print_help(); // prints help if no args are given
-    exit(-1);  
+    exit(EXIT_SUCCESS);  
   } 
 
   // getopt variables
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 
       case 'V':
         print_version();
-        exit(EXIT_SUCCESS);
+        exit(0);
         break;
 
       case 'd':
