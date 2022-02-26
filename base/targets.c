@@ -22,9 +22,29 @@
 // Globals
 short int sockfd = -1;
 extern int VERBOSE; // verbosity
+extern int DEBUG;  // Debugging
 extern char *EXEC_NAME;
 extern int GRAPH;
 extern char *CLIENT_IP; // should this be a global var?
+
+// Signal handling functions
+static void close_sock() {
+  close(sockfd);
+}
+
+// Doesn't work as intended
+static void kill_application() {
+  debug("Ctrl+C detected... killing appliction...\n");
+  
+  // OMP doesn't support this
+  if(omp_in_parallel()) {
+    debug("Killing threads...");
+    //#pragma omp cancel for
+  }
+  close(sockfd);
+
+  exit(-1);
+}
 
 
 // A wrapper for scanner
@@ -35,6 +55,8 @@ int scan_wrapper(char *target, int *total_host, int scan_type, char *ports) {
   int hosts = -1;
   uint32_t ip, mask;
 
+  signal(SIGINT, kill_application);
+
   if((hosts = cidr_to_ip(target, &ip, &mask)) != -1) {
     // cidr scan
     *total_host += hosts;
@@ -44,7 +66,7 @@ int scan_wrapper(char *target, int *total_host, int scan_type, char *ports) {
 #pragma omp parallel
     {
 #pragma omp single
-      verbose("No. of threads in use: %d\n", omp_get_num_threads());
+      debug("No. of threads in use: %d\n", omp_get_num_threads());
 
 #pragma omp for
       for(i = 0; i < hosts; i++){
@@ -63,7 +85,7 @@ int scan_wrapper(char *target, int *total_host, int scan_type, char *ports) {
 #pragma omp parallel 
     {
 #pragma omp single
-      verbose("No. of threads in use: %d\n", omp_get_num_threads());
+      debug("No. of threads in use: %d\n", omp_get_num_threads());
 
 #pragma omp for
       for(int i = 0; i < hosts; i++) {
@@ -145,6 +167,7 @@ int check_alive_ping(char *host_name) {
   char command[100];
   int com_ret = -1; // the return value of command
 
+  signal(SIGINT, kill_application);
   snprintf(command, 99, "ping -c 1 \"%s\" >/dev/null 2>&1", host_name);
   com_ret = system(command);
   com_ret = com_ret/128; // since bash returns 127>>n values
@@ -294,10 +317,6 @@ int tcp_scan(char *ipv4, int port)  {
   return 0;
 }
 
-
-void close_sock() {
-  close(sockfd);
-}
 
 // Switch to select() if possible
 int udp_scan(char *ipv4, int port) {

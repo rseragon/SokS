@@ -31,6 +31,7 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 include(CTest)
 enable_testing()
+add_subdirectory(tests)
 
 add_test(NAME First_run COMMAND "${CMAKE_BINARY_DIR}/${PROJECT_NAME}")
 

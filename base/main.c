@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
   printf("Starting scan, Time:"); 
   print_curr_time();
   fflush(stdout); // idk why this is getting overlapped
-  verbose("MAX usable threads: %d\n", omp_get_num_procs());
+  debug("MAX usable threads: %d", omp_get_num_procs());
 
 
   if(optind < argc) {

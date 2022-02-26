@@ -25,5 +25,4 @@ int build_graph(int argc, char **argv) {
   }
   
   return (gvFreeContext(gvc));
-
 }

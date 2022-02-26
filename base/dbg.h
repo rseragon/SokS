@@ -3,9 +3,7 @@
 
 #include <stdio.h>
 
-#define debug(M, ...) fprintf(stdout, "[DEBUG](%s:%d) " M "\n", __FILE__, __LINE__, ##__VA_ARGS__);
-
-//Debugging
+// real Debugging
 #define debug_info(A, M, ...) if(!(A) && DEBUG) {\
   fprintf(stdout, "[DEBUG Info] %s:%s:%d " M "\n", __FILE__, __func__, __LINE__, ##__VA_ARGS__);\
 }
@@ -33,6 +31,10 @@
   return R;\
 }
 
+// Simple debug
+#define debug(M, ...) if(DEBUG) {\
+  fprintf(stderr,"%" M "\n", ##__VA_ARGS__ );\
+}
 
 // verbose
 #define verbose_file(FILE, M, ...) if(VERBOSE) {\
